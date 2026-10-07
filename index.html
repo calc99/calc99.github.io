@@ -3,254 +3,233 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Scientific Calculator</title>
+    <title>Calc99 - Calculator</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=VT323&family=Roboto+Mono:wght@400;500;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap');
 
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #121212;
-            color: #ffffff;
+            background-color: #e5e7eb; /* Light gray background */
             display: flex;
             justify-content: center;
             align-items: center;
             min-height: 100vh;
             margin: 0;
-            overflow: hidden;
-            background-image: radial-gradient(circle at 50% 50%, #2a2a2a 0%, #121212 100%);
         }
 
-        .calc-container {
-            background: #232325; /* Dark gray body */
-            border-radius: 20px;
-            padding: 24px 20px;
-            box-shadow: 
-                0 30px 60px rgba(0, 0, 0, 0.7), 
-                inset 0 2px 5px rgba(255, 255, 255, 0.1),
-                inset 0 -5px 15px rgba(0,0,0,0.5);
-            width: 360px;
+        .calc-wrapper {
+            background: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1), 0 4px 10px rgba(0, 0, 0, 0.05);
+            width: 100%;
+            max-width: 800px;
+            overflow: hidden;
             display: flex;
             flex-direction: column;
-            gap: 20px;
-            position: relative;
-        }
-
-        /* Branding at top */
-        .brand {
-            font-family: 'Arial', sans-serif;
-            font-weight: 700;
-            font-style: italic;
-            font-size: 1.1rem;
-            color: #b0b0b0;
-            text-align: left;
-            margin-bottom: -10px;
-            padding-left: 10px;
-            letter-spacing: 1px;
-            text-shadow: 1px 1px 2px rgba(0,0,0,0.8);
         }
 
         .display-area {
-            background: #9ab49d; /* Classic TI screen green/gray */
-            border-radius: 8px;
-            padding: 16px;
-            text-align: left;
-            box-shadow: 
-                inset 0 4px 10px rgba(0, 0, 0, 0.4),
-                0 2px 0 rgba(255,255,255,0.1);
-            border: 6px solid #18181a;
-            position: relative;
-            height: 120px;
+            background-color: #ffffff;
+            padding: 24px 32px;
+            min-height: 140px;
             display: flex;
             flex-direction: column;
-            justify-content: space-between;
+            justify-content: flex-end;
+            align-items: flex-end;
+            border-bottom: 1px solid #e5e7eb;
+            position: relative;
         }
 
-        .display-history {
-            font-family: 'VT323', monospace;
-            font-size: 1.5rem;
-            color: #2a332c;
-            min-height: 1.5rem;
+        .history-text {
+            color: #6b7280;
+            font-size: 1.25rem;
+            min-height: 1.75rem;
+            margin-bottom: 8px;
             word-wrap: break-word;
-            overflow: hidden;
-            opacity: 0.8;
-            line-height: 1.1;
+            max-width: 100%;
         }
 
-        .display-main {
-            font-family: 'VT323', monospace;
-            font-size: 2.5rem;
-            color: #121713;
-            white-space: nowrap;
-            overflow: hidden;
-            text-align: right;
-            text-overflow: ellipsis;
+        .main-text {
+            color: #111827;
+            font-size: 3rem;
+            font-weight: 400;
             line-height: 1;
+            word-wrap: break-word;
+            max-width: 100%;
+            letter-spacing: -0.02em;
         }
 
-        .secret-mode-indicator {
-            position: absolute;
-            top: 6px;
-            left: 8px;
-            font-family: 'Roboto Mono', monospace;
-            font-size: 0.65rem;
-            font-weight: bold;
-            color: #d11f1f;
-            opacity: 0;
-            transition: opacity 0.3s;
-            text-transform: uppercase;
-        }
-        
-        .indicator-2nd {
-            position: absolute;
-            top: 6px;
-            left: 35px;
-            font-family: 'Roboto Mono', monospace;
-            font-size: 0.65rem;
-            font-weight: bold;
-            color: #121713;
-            opacity: 0;
-            transition: opacity 0.1s;
+        .cursor {
+            display: inline-block;
+            width: 2px;
+            height: 3rem;
+            background-color: #2563eb;
+            vertical-align: middle;
+            animation: blink 1s step-start infinite;
+            margin-left: 4px;
         }
 
-        .secret-mode .secret-mode-indicator { opacity: 1; }
-        .is-2nd .indicator-2nd { opacity: 1; }
+        @keyframes blink {
+            50% { opacity: 0; }
+        }
 
-        .keypad {
+        .keypad-container {
+            display: flex;
+            background-color: #f9fafb;
+            padding: 16px;
+            gap: 16px;
+        }
+
+        /* Mobile responsive stack */
+        @media (max-width: 640px) {
+            .keypad-container {
+                flex-direction: column;
+            }
+            .calc-wrapper {
+                height: 100vh;
+                border-radius: 0;
+            }
+            .display-area {
+                flex: 1;
+            }
+        }
+
+        .grid-panel {
             display: grid;
-            grid-template-columns: repeat(5, 1fr);
-            gap: 10px 8px;
+            gap: 8px;
+            flex: 1;
+        }
+
+        .left-panel {
+            grid-template-columns: repeat(3, 1fr);
+        }
+
+        .right-panel {
+            grid-template-columns: repeat(4, 1fr);
         }
 
         .btn {
+            background-color: #f3f4f6;
             border: none;
-            border-radius: 6px;
-            font-family: 'Inter', sans-serif;
-            font-size: 0.95rem;
-            font-weight: 600;
-            cursor: pointer;
-            padding: 12px 0;
-            transition: all 0.05s ease;
-            user-select: none;
-            position: relative;
-            box-shadow: 0 4px 0 rgba(0,0,0,0.4), 0 5px 10px rgba(0,0,0,0.3);
-        }
-
-        .btn:active {
-            transform: translateY(4px);
-            box-shadow: 0 0 0 rgba(0,0,0,0.4), inset 0 3px 6px rgba(0,0,0,0.3);
-        }
-
-        /* Scientific Functions */
-        .btn-func {
-            background: #3a3a3c;
-            color: #e0e0e0;
-            font-size: 0.85rem;
-            box-shadow: 0 4px 0 #1e1e1f, 0 5px 10px rgba(0,0,0,0.3);
-        }
-
-        /* Numbers */
-        .btn-num {
-            background: #d4d4d2;
-            color: #1a1a1a;
+            border-radius: 8px;
+            padding: 16px 0;
             font-size: 1.1rem;
-            box-shadow: 0 4px 0 #9ca3af, 0 5px 10px rgba(0,0,0,0.3);
+            font-weight: 500;
+            color: #374151;
+            cursor: pointer;
+            transition: all 0.1s ease;
+            user-select: none;
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
 
-        /* Standard Operations */
-        .btn-op {
-            background: #4a4a4c;
-            color: #ffffff;
-            font-size: 1.2rem;
-            box-shadow: 0 4px 0 #2a2a2c, 0 5px 10px rgba(0,0,0,0.3);
-        }
+        .btn:hover { background-color: #e5e7eb; }
+        .btn:active { background-color: #d1d5db; transform: scale(0.97); }
 
-        /* Special Buttons */
-        .btn-2nd {
-            background: #f4b400; /* TI-84 Plus yellow */
-            color: #1a1a1a;
-            box-shadow: 0 4px 0 #b38400, 0 5px 10px rgba(0,0,0,0.3);
+        /* Specific Button Types */
+        .btn-num {
+            background-color: #ffffff;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+            font-size: 1.25rem;
+            font-weight: 600;
         }
+        .btn-num:hover { background-color: #f9fafb; }
+        .btn-num:active { background-color: #f3f4f6; }
+
+        .btn-op { color: #111827; }
         
+        .btn-eval {
+            background-color: #2563eb;
+            color: white;
+            font-weight: 600;
+            box-shadow: 0 2px 4px rgba(37, 99, 235, 0.2);
+        }
+        .btn-eval:hover { background-color: #1d4ed8; }
+        .btn-eval:active { background-color: #1e40af; }
+
         .btn-2nd.active {
-            background: #ffcf40;
-            transform: translateY(2px);
-            box-shadow: 0 2px 0 #b38400, inset 0 2px 4px rgba(0,0,0,0.2);
+            background-color: #374151;
+            color: white;
         }
 
-        .btn-enter {
-            background: #2962ff; /* Classic blue enter */
-            color: #ffffff;
-            font-size: 1rem;
-            box-shadow: 0 4px 0 #0039cb, 0 5px 10px rgba(0,0,0,0.3);
+        /* Secret Mode Indicators */
+        .secret-indicator {
+            position: absolute;
+            top: 16px;
+            left: 20px;
+            color: #ef4444;
+            font-weight: 600;
+            font-size: 0.875rem;
+            letter-spacing: 0.05em;
+            display: none;
         }
-
-        .btn-zero {
-            grid-column: span 2;
-        }
+        .secret-mode .secret-indicator { display: block; }
+        .secret-mode .cursor { background-color: #ef4444; }
 
     </style>
 </head>
 <body>
 
-    <div class="calc-container">
-        <div class="brand">TEXAS MATH-84</div>
+    <div class="calc-wrapper" id="calcWrapper">
         
-        <div class="display-area" id="displayArea">
-            <div class="secret-mode-indicator">SEC</div>
-            <div class="indicator-2nd">2ND</div>
-            <div class="display-history" id="history"></div>
-            <div class="display-main" id="display">0</div>
+        <div class="display-area">
+            <div class="secret-indicator">SEC MODE</div>
+            <div class="history-text" id="history"></div>
+            <div class="flex items-center">
+                <div class="main-text" id="display"></div>
+                <div class="cursor" id="cursor"></div>
+            </div>
         </div>
 
-        <div class="keypad">
-            <!-- Row 1 -->
-            <button class="btn btn-2nd" id="btn2nd" onclick="handle2nd()">2nd</button>
-            <button class="btn btn-func" onclick="handleInput('π')">π</button>
-            <button class="btn btn-func" onclick="handleInput('e')">e</button>
-            <button class="btn btn-func" onclick="handleDel()">DEL</button>
-            <button class="btn btn-func" onclick="handleClear()" style="background:#4a4a4c;">CLEAR</button>
+        <div class="keypad-container">
+            <!-- Left Panel: Functions -->
+            <div class="grid-panel left-panel">
+                <button class="btn btn-2nd" id="btn2nd" onclick="toggle2nd()">2nd</button>
+                <button class="btn" onclick="handleInput('π')">π</button>
+                <button class="btn" onclick="handleInput('e')">e</button>
+                
+                <button class="btn" onclick="handleInput('²')">a²</button>
+                <button class="btn" onclick="handleInput('^')">a^b</button>
+                <button class="btn" onclick="handleInput('√(')">√</button>
 
-            <!-- Row 2 -->
-            <button class="btn btn-func" onclick="handleInput('²')">x²</button>
-            <button class="btn btn-func" onclick="handleInput('^')">^</button>
-            <button class="btn btn-func" onclick="handleInput('√(')">√</button>
-            <button class="btn btn-func" onclick="handleInput('(')">(</button>
-            <button class="btn btn-func" onclick="handleInput(')')">)</button>
+                <button class="btn" onclick="handleInput('sin(')">sin</button>
+                <button class="btn" onclick="handleInput('cos(')">cos</button>
+                <button class="btn" onclick="handleInput('tan(')">tan</button>
 
-            <!-- Row 3 -->
-            <button class="btn btn-func" onclick="handleInput('sin(')">sin</button>
-            <button class="btn btn-func" onclick="handleInput('cos(')">cos</button>
-            <button class="btn btn-func" onclick="handleInput('tan(')">tan</button>
-            <button class="btn btn-func" onclick="handleInput('log(')">log</button>
-            <button class="btn btn-func" onclick="handleInput('ln(')">ln</button>
+                <button class="btn" onclick="handleInput('(')">(</button>
+                <button class="btn" onclick="handleInput(')')">)</button>
+                <button class="btn" onclick="handleInput('ANS')">ans</button>
+            </div>
 
-            <!-- Row 4 -->
-            <button class="btn btn-func" onclick="handleInput('⁻¹')">x⁻¹</button>
-            <button class="btn btn-num" onclick="handleInput('7')">7</button>
-            <button class="btn btn-num" onclick="handleInput('8')">8</button>
-            <button class="btn btn-num" onclick="handleInput('9')">9</button>
-            <button class="btn btn-op" onclick="handleInput('÷')">÷</button>
+            <!-- Right Panel: Numpad and Basics -->
+            <div class="grid-panel right-panel">
+                <button class="btn" onclick="handleClear()">AC</button>
+                <button class="btn" onclick="handleDel()">DEL</button>
+                <button class="btn btn-op" onclick="handleInput('%')">%</button>
+                <button class="btn btn-op" onclick="handleInput('÷')">÷</button>
 
-            <!-- Row 5 -->
-            <button class="btn btn-func" onclick="handleSignToggle()">+/-</button>
-            <button class="btn btn-num" onclick="handleInput('4')">4</button>
-            <button class="btn btn-num" onclick="handleInput('5')">5</button>
-            <button class="btn btn-num" onclick="handleInput('6')">6</button>
-            <button class="btn btn-op" onclick="handleInput('×')">×</button>
+                <button class="btn btn-num" onclick="handleInput('7')">7</button>
+                <button class="btn btn-num" onclick="handleInput('8')">8</button>
+                <button class="btn btn-num" onclick="handleInput('9')">9</button>
+                <button class="btn btn-op" onclick="handleInput('×')">×</button>
 
-            <!-- Row 6 -->
-            <button class="btn btn-func" onclick="handleInput('ANS')">ANS</button>
-            <button class="btn btn-num" onclick="handleInput('1')">1</button>
-            <button class="btn btn-num" onclick="handleInput('2')">2</button>
-            <button class="btn btn-num" onclick="handleInput('3')">3</button>
-            <button class="btn btn-op" onclick="handleInput('-')">-</button>
+                <button class="btn btn-num" onclick="handleInput('4')">4</button>
+                <button class="btn btn-num" onclick="handleInput('5')">5</button>
+                <button class="btn btn-num" onclick="handleInput('6')">6</button>
+                <button class="btn btn-op" onclick="handleInput('-')">-</button>
 
-            <!-- Row 7 -->
-            <button class="btn btn-num btn-zero" onclick="handleInput('0')">0</button>
-            <button class="btn btn-num" onclick="handleInput('.')">.</button>
-            <button class="btn btn-op" onclick="handleInput('+')">+</button>
-            <button class="btn btn-enter" onclick="handleEnter()">ENTER</button>
+                <button class="btn btn-num" onclick="handleInput('1')">1</button>
+                <button class="btn btn-num" onclick="handleInput('2')">2</button>
+                <button class="btn btn-num" onclick="handleInput('3')">3</button>
+                <button class="btn btn-op" onclick="handleInput('+')">+</button>
+
+                <button class="btn btn-num" onclick="handleInput('0')">0</button>
+                <button class="btn btn-num" onclick="handleInput('.')">.</button>
+                <button class="btn btn-num" onclick="handleInput('-')">(-)</button>
+                <button class="btn btn-eval" onclick="handleEnter()">=</button>
+            </div>
         </div>
     </div>
 
@@ -258,15 +237,16 @@
         // DOM Elements
         const displayEl = document.getElementById('display');
         const historyEl = document.getElementById('history');
-        const displayArea = document.getElementById('displayArea');
+        const wrapperEl = document.getElementById('calcWrapper');
         const btn2nd = document.getElementById('btn2nd');
+        const cursor = document.getElementById('cursor');
 
-        // State variables
+        // State Variables
         let expression = '';
         let lastAnswer = '0';
         let justEvaluated = false;
-
-        // Secret Mode variables
+        
+        // Secret Mode Variables
         let is2ndActive = false;
         let isSecretModeActive = false;
         let secretBuffer = '';
@@ -275,42 +255,37 @@
 
         function updateDisplay() {
             if (isSecretModeActive) {
-                historyEl.textContent = 'ENTER SEC CODE:';
-                displayEl.textContent = secretBuffer || '_';
+                historyEl.textContent = 'Enter Secret Code:';
+                displayEl.textContent = secretBuffer || '';
                 return;
             }
 
-            // Normal display
-            historyEl.textContent = expression;
-            // Only show the live input in main display if not too long, otherwise scroll or keep it empty
+            // Standard display logic
             if (justEvaluated) {
-                // If just calculated, show result in main display
-                let resultStr = lastAnswer.toString();
-                if (resultStr.length > 12) {
-                    let num = parseFloat(resultStr);
-                    resultStr = num.toPrecision(10).toString();
-                }
-                displayEl.textContent = resultStr;
+                historyEl.textContent = expression + ' =';
+                displayEl.textContent = lastAnswer;
+                cursor.style.display = 'none'; // Hide cursor when showing answer
             } else {
-                // Show a blinker or nothing since the expression is typing out at the top
-                displayEl.textContent = '';
+                historyEl.textContent = 'Ans = ' + lastAnswer;
+                displayEl.textContent = expression;
+                cursor.style.display = 'inline-block';
             }
         }
 
-        // Handle general input (numbers, operators, functions)
         function handleInput(val) {
+            // Secret Mode Input Logic
             if (isSecretModeActive) {
                 if (val >= '0' && val <= '9' && secretBuffer.length < TARGET_SECRET.length) {
                     secretBuffer += val;
                     updateDisplay();
                     
                     if (secretBuffer === TARGET_SECRET) {
-                        displayEl.textContent = 'ACCESS GRANTED';
+                        displayEl.textContent = 'Authorizing...';
                         setTimeout(() => {
                             window.location.href = REDIRECT_URL;
-                        }, 600);
+                        }, 500);
                     } else if (secretBuffer.length === TARGET_SECRET.length) {
-                        displayEl.textContent = 'ERROR';
+                        displayEl.textContent = 'Error';
                         setTimeout(() => {
                             secretBuffer = '';
                             updateDisplay();
@@ -320,12 +295,12 @@
                 return;
             }
 
-            // Clear 2nd state on any regular input
-            reset2ndState();
+            // Normal Calculator Logic
+            reset2nd(); // any regular input cancels 2nd state
 
             if (justEvaluated) {
-                // If user starts typing an operator right after evaluating, continue calculation
-                if (['+', '-', '×', '÷', '^', '²', '⁻¹'].includes(val)) {
+                // If user types operator after evaluating, chain the answer
+                if (['+', '-', '×', '÷', '^', '²'].includes(val)) {
                     expression = 'ANS' + val;
                 } else {
                     expression = val;
@@ -338,34 +313,47 @@
             updateDisplay();
         }
 
-        // Toggle sign (mimics the (-) button on TI-84)
-        function handleSignToggle() {
+        function toggle2nd() {
             if (isSecretModeActive) return;
-            reset2ndState();
-            
-            if (justEvaluated) {
-                expression = '-';
-                justEvaluated = false;
+            is2ndActive = !is2ndActive;
+            if (is2ndActive) {
+                btn2nd.classList.add('active');
             } else {
-                expression += '-'; 
+                btn2nd.classList.remove('active');
             }
+        }
+
+        function reset2nd() {
+            is2ndActive = false;
+            btn2nd.classList.remove('active');
+        }
+
+        function handleClear() {
+            if (isSecretModeActive) {
+                // Exit secret mode
+                isSecretModeActive = false;
+                secretBuffer = '';
+                wrapperEl.classList.remove('secret-mode');
+            }
+            reset2nd();
+            expression = '';
+            justEvaluated = false;
             updateDisplay();
         }
 
-        // Delete last character
         function handleDel() {
             if (isSecretModeActive) return;
-            reset2ndState();
+            reset2nd();
             
             if (justEvaluated) {
                 expression = '';
                 justEvaluated = false;
             } else if (expression.length > 0) {
-                // Check if deleting a function word (sin, cos, etc)
-                if (expression.endsWith('sin(') || expression.endsWith('cos(') || expression.endsWith('tan(') || expression.endsWith('log(')) {
+                // Remove function blocks intelligently
+                if (expression.endsWith('sin(') || expression.endsWith('cos(') || expression.endsWith('tan(')) {
                     expression = expression.slice(0, -4);
-                } else if (expression.endsWith('ln(')) {
-                    expression = expression.slice(0, -3);
+                } else if (expression.endsWith('√(')) {
+                    expression = expression.slice(0, -2);
                 } else {
                     expression = expression.slice(0, -1);
                 }
@@ -373,58 +361,22 @@
             updateDisplay();
         }
 
-        // Clear everything
-        function handleClear() {
-            if (isSecretModeActive) {
-                isSecretModeActive = false;
-                secretBuffer = '';
-                displayArea.classList.remove('secret-mode');
-            }
-            reset2ndState();
-            expression = '';
-            justEvaluated = false;
-            displayEl.textContent = '0';
-            historyEl.textContent = '';
-        }
-
-        // 2nd Button Logic
-        function handle2nd() {
-            if (isSecretModeActive) return;
-            
-            is2ndActive = !is2ndActive;
-            if (is2ndActive) {
-                btn2nd.classList.add('active');
-                displayArea.classList.add('is-2nd');
-            } else {
-                reset2ndState();
-            }
-        }
-
-        function reset2ndState() {
-            is2ndActive = false;
-            btn2nd.classList.remove('active');
-            displayArea.classList.remove('is-2nd');
-        }
-
-        // Calculate/Enter Logic
         function handleEnter() {
-            // Trigger Secret Mode?
+            // TRIGGER SECRET MODE
             if (is2ndActive && !isSecretModeActive) {
                 isSecretModeActive = true;
-                reset2ndState();
+                reset2nd();
                 secretBuffer = '';
-                displayArea.classList.add('secret-mode');
+                wrapperEl.classList.add('secret-mode');
                 updateDisplay();
                 return;
             }
 
-            if (isSecretModeActive) return;
-            if (expression.trim() === '') return;
-
-            reset2ndState();
+            if (isSecretModeActive || expression.trim() === '') return;
+            reset2nd();
 
             try {
-                // Convert visual expression to Javascript Math expression
+                // Format string for JS Math evaluation
                 let parseable = expression
                     .replace(/ANS/g, `(${lastAnswer})`)
                     .replace(/π/g, 'Math.PI')
@@ -432,27 +384,26 @@
                     .replace(/sin\(/g, 'Math.sin(')
                     .replace(/cos\(/g, 'Math.cos(')
                     .replace(/tan\(/g, 'Math.tan(')
-                    .replace(/log\(/g, 'Math.log10(')
-                    .replace(/ln\(/g, 'Math.log(')
                     .replace(/√\(/g, 'Math.sqrt(')
                     .replace(/²/g, '**2')
-                    .replace(/⁻¹/g, '**-1')
                     .replace(/\^/g, '**')
                     .replace(/×/g, '*')
                     .replace(/÷/g, '/');
 
-                // Auto-close missing parentheses at the end for ease of use
+                // Handle percentages
+                parseable = parseable.replace(/(\d+(?:\.\d+)?)%/g, '($1/100)');
+
+                // Auto-close brackets
                 const openCount = (parseable.match(/\(/g) || []).length;
                 const closeCount = (parseable.match(/\)/g) || []).length;
                 for (let i = 0; i < openCount - closeCount; i++) {
                     parseable += ')';
-                    expression += ')'; // Update visual string too
+                    expression += ')'; // Show closed brackets in history
                 }
 
-                // Evaluate
                 let result = eval(parseable);
                 
-                // Handle floating point weirdness (e.g., 0.1 + 0.2)
+                // Fix floating point errors (e.g. 0.1 + 0.2 = 0.30000000000000004)
                 if (!isNaN(result) && result !== Infinity && result !== -Infinity) {
                     result = Math.round(result * 1e12) / 1e12; 
                 }
@@ -463,27 +414,40 @@
 
             } catch (error) {
                 justEvaluated = true;
-                lastAnswer = 'SYNTAX ERROR';
-                displayEl.textContent = 'ERROR';
+                lastAnswer = 'Error';
+                updateDisplay();
             }
         }
 
-        // Keyboard Support
         document.addEventListener('keydown', (e) => {
-            if (e.key >= '0' && e.key <= '9') handleInput(e.key);
-            if (e.key === '.') handleInput('.');
-            if (e.key === '+' || e.key === '-') handleInput(e.key);
-            if (e.key === '*') handleInput('×');
-            if (e.key === '/') handleInput('÷');
-            if (e.key === '(') handleInput('(');
-            if (e.key === ')') handleInput(')');
-            if (e.key === 'Backspace') handleDel();
-            if (e.key === 'Escape') handleClear();
-            if (e.key === 'Enter' || e.key === '=') handleEnter();
+            if (e.key >= '0' && e.key <= '9') {
+                handleInput(e.key);
+            } else if (e.key === '.') {
+                handleInput('.');
+            } else if (e.key === '+' || e.key === '-') {
+                handleInput(e.key);
+            } else if (e.key === '*') {
+                handleInput('×');
+            } else if (e.key === '/') {
+                handleInput('÷');
+            } else if (e.key === '(') {
+                handleInput('(');
+            } else if (e.key === ')') {
+                handleInput(')');
+            } else if (e.key === '^') {
+                handleInput('^');
+            } else if (e.key === 'Backspace') {
+                handleDel();
+            } else if (e.key === 'Escape') {
+                handleClear();
+            } else if (e.key === 'Enter' || e.key === '=') {
+                e.preventDefault(); // Prevent accidental form submissions if any
+                handleEnter();
+            }
         });
 
-        // Init
-        handleClear();
+        // Initialize state
+        updateDisplay();
     </script>
 </body>
 </html>
