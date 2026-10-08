@@ -1,0 +1,27 @@
+[
+  {
+    "id": "chess",
+    "name": "Chess",
+    "tag": "Puzzles",
+    "url": "https://lichess.org/training/frame?theme=dark",
+    "note": "lichess blocks iframing on /play and /analysis; the training frame (interactive puzzles) is the only playable embed URL. Open in new tab for full chess."
+  },
+  {
+    "id": "baldi",
+    "name": "Baldi's Basics",
+    "tag": "Horror",
+    "url": "https://html-classic.itch.zone/html/4487446/Baldi%27s%20Web-Based%20Basics%201.4.3%20Edition%201.0.0/index.html"
+  },
+  {
+    "id": "ddlc",
+    "name": "Doki Doki Literature Club",
+    "tag": "Visual Novel",
+    "url": "https://emeraldgreenr.github.io/"
+  },
+  {
+    "id": "geometry-dash",
+    "name": "Geometry Dash",
+    "tag": "Rhythm",
+    "url": "https://html-classic.itch.zone/html/17081493/index.html?v=1782581569"
+  }
+]
