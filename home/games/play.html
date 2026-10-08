@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Calc99 — Play</title>
+  <link rel="stylesheet" href="/home/assets/css/style.css">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='20' fill='%230a0a14'/%3E%3Ctext x='50' y='68' font-family='monospace' font-size='48' fill='%2300f0ff' text-anchor='middle'%3EC%3C/text%3E%3C/svg%3E">
+</head>
+<body>
+  <div id="nav-root"></div>
+
+  <main class="container" style="padding-top:18px; padding-bottom:18px;">
+    <div class="player-bar">
+      <a class="btn btn-ghost" href="/home/games/index.html">← Back</a>
+      <h1 id="game-title" class="section-title" style="margin:0; font-size:1.3rem; flex:1;">Loading…</h1>
+      <button id="fs-btn" class="btn" title="Fullscreen">⛶ Fullscreen</button>
+    </div>
+
+    <div class="player-frame-wrap" id="frame-wrap">
+      <iframe id="game-frame" src="about:blank" allow="autoplay; fullscreen; gamepad; accelerometer; gyroscope; clipboard-write; encrypted-media" allowfullscreen></iframe>
+    </div>
+  </main>
+
+  <script src="/home/assets/js/main.js"></script>
+  <script>Calc99.renderNav('games');</script>
+  <script>
+  (async function () {
+    const params = new URLSearchParams(location.search);
+    const id = params.get('id');
+    if (!id) {
+      document.getElementById('game-title').textContent = 'No game selected';
+      return;
+    }
+
+    const titleEl = document.getElementById('game-title');
+    const frame = document.getElementById('game-frame');
+    const frameWrap = document.getElementById('frame-wrap');
+
+    try {
+      const res = await fetch('/home/games/games.json', { cache: 'no-store' });
+      const games = await res.json();
+      const g = games.find(x => x.id === id);
+      if (!g) {
+        titleEl.textContent = 'Game not found: ' + id;
+        return;
+      }
+      titleEl.textContent = g.name;
+      document.title = 'Calc99 — ' + g.name;
+      frame.src = g.url;
+    } catch (e) {
+      titleEl.textContent = 'Error loading game';
+      console.error(e);
+    }
+
+    document.getElementById('fs-btn').addEventListener('click', () => {
+      if (document.fullscreenElement) {
+        document.exitFullscreen();
+      } else if (frameWrap.requestFullscreen) {
+        frameWrap.requestFullscreen();
+      }
+    });
+  })();
+  </script>
+</body>
+</html>
