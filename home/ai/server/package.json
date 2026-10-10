@@ -1,16 +1,13 @@
 {
   "name": "calc99-ai-backend",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "type": "module",
   "private": true,
-  "description": "Serverless backend for the Calc99 AI chat — proxies z-ai-web-dev-sdk.",
+  "description": "Serverless backend for the Calc99 AI chat — calls Groq's OpenAI-compatible API.",
   "main": "api.js",
   "scripts": {
     "start": "node api.js",
     "dev": "node --watch api.js"
-  },
-  "dependencies": {
-    "z-ai-web-dev-sdk": "latest"
   },
   "engines": {
     "node": ">=18"
