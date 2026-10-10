@@ -42,7 +42,8 @@ async function callGroq(messages) {
   return data.choices?.[0]?.message?.content || '(empty)';
 }
 
-export async function handler(req, res) {
+// NOTE: @vercel/node REQUIRES `export default` — named exports don't work.
+export default async function handler(req, res) {
   const allowedOrigins = ['https://calc99.github.io', 'http://localhost:8787', 'http://127.0.0.1:8787'];
   const origin = req.headers.origin;
   if (allowedOrigins.includes(origin) || !origin) {
@@ -103,6 +104,7 @@ export async function handler(req, res) {
   res.end(JSON.stringify({ error: 'Not found' }));
 }
 
+// Standalone server for local dev (skipped on Vercel)
 const isMain = process.env.NODE_ENV !== 'production' && !process.env.VERCEL && !process.env.NETLIFY;
 if (isMain) {
   const port = Number(process.env.PORT) || 8787;
