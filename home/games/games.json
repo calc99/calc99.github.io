@@ -4,24 +4,27 @@
     "name": "Chess",
     "tag": "Puzzles",
     "url": "https://lichess.org/training/frame?theme=dark",
-    "note": "lichess blocks iframing on /play and /analysis; the training frame (interactive puzzles) is the only playable embed URL. Open in new tab for full chess."
+    "note": "lichess blocks iframing on /play and /analysis; the training frame is the only playable embed URL."
   },
   {
     "id": "baldi",
     "name": "Baldi's Basics",
     "tag": "Horror",
-    "url": "https://html-classic.itch.zone/html/4487446/Baldi%27s%20Web-Based%20Basics%201.4.3%20Edition%201.0.0/index.html"
+    "url": "/home/games/hosted/baldi/index.html",
+    "note": "Self-hosted Unity WebGL build (~35MB)."
   },
   {
     "id": "ddlc",
     "name": "Doki Doki Literature Club",
     "tag": "Visual Novel",
-    "url": "https://emeraldgreenr.github.io/"
+    "url": "/home/games/hosted/ddlc/index.html",
+    "note": "Self-hosted Ren'Py web build (~107MB). Optimized: dropped unpacked game/ folder, debug symbols, source map."
   },
   {
     "id": "geometry-dash",
     "name": "Geometry Dash",
     "tag": "Rhythm",
-    "url": "https://html-classic.itch.zone/html/17081493/index.html?v=1782581569"
+    "url": "/home/games/hosted/gd/index.html",
+    "note": "Self-hosted 'Web Dashers' fan mod of GD web demo (~82MB)."
   }
 ]

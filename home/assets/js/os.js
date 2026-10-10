@@ -76,13 +76,15 @@
   ];
 
   // ─── Public UV/Omega instances (same as proxy page) ────────────
+  // Reality: public UV instances are extremely volatile. Most die within weeks.
+  // Self-host your own: https://github.com/nick-csa/ultraviolet-static
   const PROXY_INSTANCES = [
-    { label: 'Incognito',       base: 'https://incognito.in/' },
-    { label: 'UV Static',       base: 'https://uv-static.netlify.app/' },
-    { label: 'Mercury',         base: 'https://mercury-network.pages.dev/' },
-    { label: 'Open UB',         base: 'https://open-ub.pages.dev/' },
-    { label: 'Holy Unblocker',  base: 'https://holyubofficial.net/' },
-    { label: 'Telarithub',      base: 'https://telarithub.pages.dev/' },
+    { label: 'UV Static (demo)',    base: 'https://uv-static.netlify.app/' },
+    { label: 'Holy Unblocker',      base: 'https://holyubofficial.net/' },
+    { label: 'Holequart',           base: 'https://holequart.pages.dev/' },
+    { label: 'Open UB',             base: 'https://open-ub.pages.dev/' },
+    { label: 'Mercury',             base: 'https://mercury-network.pages.dev/' },
+    { label: 'Telarithub',          base: 'https://telarithub.pages.dev/' },
   ];
 
   // ─── Element factory ───────────────────────────────────────────

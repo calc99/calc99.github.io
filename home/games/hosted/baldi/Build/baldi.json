@@ -1,0 +1,17 @@
+{
+  "companyName": "CyndaquilDAC Productions",
+  "productName": "BaldiWeb",
+  "productVersion": "1.0.0",
+  "dataUrl": "baldi.data.unityweb",
+  "wasmCodeUrl": "baldi.wasm.code.unityweb",
+  "wasmFrameworkUrl": "baldi.wasm.framework.unityweb",
+  "graphicsAPI": ["WebGL 2.0", "WebGL 1.0"],
+  "webglContextAttributes": { "preserveDrawingBuffer": false },
+  "backgroundUrl": "baldi.jpg",
+  "splashScreenStyle": "Dark",
+  "backgroundColor": "#000000",
+  "cacheControl": { "default": "must-revalidate" },
+  "developmentBuild": false,
+  "multithreading": false,
+  "unityVersion": "2019.2.8f1"
+}

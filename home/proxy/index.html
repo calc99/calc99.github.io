@@ -14,7 +14,7 @@
 
     <div class="banner">
       <span class="banner-icon">⚠</span>
-      <span><b>Public proxy instances go down often.</b> If the iframe below is blank, scroll the dropdown to another instance — or self-host your own Ultraviolet deployment (instructions in the README).</span>
+      <span><b>Public UV/Omega instances die weekly.</b> If every option below is broken, that's why — they're free volunteer-run deployments and get taken down constantly. The bulletproof fix is to <a href="https://github.com/nick-csa/ultraviolet-static" target="_blank" rel="noopener">self-host your own UV instance</a> (free on Render/Railway) and add it to the dropdown in <code style="color:var(--accent)">/home/proxy/index.html</code>.</span>
     </div>
 
     <div class="proxy-bar">
@@ -31,7 +31,7 @@
     </div>
 
     <p style="margin-top:14px; color:var(--text-fade); font-size:0.85rem;">
-      How this works: GitHub Pages can only serve static files. The actual Ultraviolet/Omega proxy runs on a separate Node.js server. The dropdown above points at well-known public instances; you can add or remove them in <code style="color:var(--cyan)">/home/proxy/index.html</code>.
+      How this works: GitHub Pages can only serve static files. The actual Ultraviolet/Omega proxy runs on a separate Node.js server. The dropdown above points at well-known public instances; you can add or remove them in <code style="color:var(--accent)">/home/proxy/index.html</code>.
     </p>
   </main>
 
@@ -41,17 +41,23 @@
   (function () {
     // ====================================================================
     // PUBLIC UV/OMEGA INSTANCES — edit this list as instances die/born.
-    // A working instance looks like:  https://example.com/uv/service/
-    // (the trailing /service/ is the UV/Omega entry path).
-    // Self-host instructions: https://github.com/nick-csa/ultraviolet-static
+    //
+    // Reality check: public UV instances are EXTREMELY volatile.
+    // Most get killed by the host (Cloudflare, Render free tier) or
+    // get DMCA'd. If you want a reliable proxy, self-host:
+    //   https://github.com/nick-csa/ultraviolet-static
+    // (deploys free on Render/Railway, ~5 min setup)
+    //
+    // To verify an instance is alive, open it in a browser and try
+    // browsing to https://example.com through it.
     // ====================================================================
     const INSTANCES = [
-      { label: 'Incognito (default)',  base: 'https://incognito.in/' },
-      { label: 'UV Static Demo',       base: 'https://uv-static.netlify.app/' },
-      { label: 'Mercury Network',      base: 'https://mercury-network.pages.dev/' },
-      { label: 'Open UB',              base: 'https://open-ub.pages.dev/' },
-      { label: 'Holy Unblocker',       base: 'https://holyubofficial.net/' },
-      { label: 'Telarithub',           base: 'https://telarithub.pages.dev/' },
+      { label: 'UV Static (official demo)', base: 'https://uv-static.netlify.app/' },
+      { label: 'Holy Unblocker',             base: 'https://holyubofficial.net/' },
+      { label: 'Holequart',                  base: 'https://holequart.pages.dev/' },
+      { label: 'Open UB',                    base: 'https://open-ub.pages.dev/' },
+      { label: 'Mercury',                    base: 'https://mercury-network.pages.dev/' },
+      { label: 'Telarithub',                 base: 'https://telarithub.pages.dev/' },
     ];
 
     const urlInput   = document.getElementById('url-input');
