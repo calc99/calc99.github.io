@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Calc99 — Proxy</title>
+  <link rel="stylesheet" href="/home/assets/css/style.css">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='20' fill='%230a0a14'/%3E%3Ctext x='50' y='68' font-family='monospace' font-size='48' fill='%2300f0ff' text-anchor='middle'%3EC%3C/text%3E%3C/svg%3E">
+</head>
+<body>
+  <div id="nav-root"></div>
+
+  <main class="container" style="padding-top:18px; padding-bottom:18px;">
+
+    <div class="banner">
+      <span class="banner-icon">⚠</span>
+      <span><b>Public proxy instances go down often.</b> If the iframe below is blank, scroll the dropdown to another instance — or self-host your own Ultraviolet deployment (instructions in the README).</span>
+    </div>
+
+    <div class="proxy-bar">
+      <input id="url-input" type="text" placeholder="Search Google or type a URL (e.g. youtube.com)" autocomplete="off">
+      <button id="go-btn" class="btn btn-primary">Go →</button>
+      <select id="instance-select" class="btn btn-ghost" style="padding:8px 10px;">
+        <option value="" disabled selected>Loading instances…</option>
+      </select>
+      <button id="open-new" class="btn" title="Open in new tab">↗ New tab</button>
+    </div>
+
+    <div class="proxy-frame-wrap" id="frame-wrap">
+      <iframe id="proxy-frame" src="about:blank" referrerpolicy="no-referrer" allow="fullscreen; clipboard-write; encrypted-media" allowfullscreen></iframe>
+    </div>
+
+    <p style="margin-top:14px; color:var(--text-fade); font-size:0.85rem;">
+      How this works: GitHub Pages can only serve static files. The actual Ultraviolet/Omega proxy runs on a separate Node.js server. The dropdown above points at well-known public instances; you can add or remove them in <code style="color:var(--cyan)">/home/proxy/index.html</code>.
+    </p>
+  </main>
+
+  <script src="/home/assets/js/main.js"></script>
+  <script>Calc99.renderNav('proxy');</script>
+  <script>
+  (function () {
+    // ====================================================================
+    // PUBLIC UV/OMEGA INSTANCES — edit this list as instances die/born.
+    // A working instance looks like:  https://example.com/uv/service/
+    // (the trailing /service/ is the UV/Omega entry path).
+    // Self-host instructions: https://github.com/nick-csa/ultraviolet-static
+    // ====================================================================
+    const INSTANCES = [
+      { label: 'Incognito (default)',  base: 'https://incognito.in/' },
+      { label: 'UV Static Demo',       base: 'https://uv-static.netlify.app/' },
+      { label: 'Mercury Network',      base: 'https://mercury-network.pages.dev/' },
+      { label: 'Open UB',              base: 'https://open-ub.pages.dev/' },
+      { label: 'Holy Unblocker',       base: 'https://holyubofficial.net/' },
+      { label: 'Telarithub',           base: 'https://telarithub.pages.dev/' },
+    ];
+
+    const urlInput   = document.getElementById('url-input');
+    const goBtn      = document.getElementById('go-btn');
+    const openNewBtn = document.getElementById('open-new');
+    const select     = document.getElementById('instance-select');
+    const frame      = document.getElementById('proxy-frame');
+
+    // Populate the dropdown
+    select.innerHTML = INSTANCES.map((it, i) =>
+      `<option value="${i}"${i===0?' selected':''}>${it.label}</option>`
+    ).join('');
+
+    function currentInstance() {
+      return INSTANCES[parseInt(select.value, 10) || 0];
+    }
+
+    function normalizeQuery(q) {
+      q = q.trim();
+      if (!q) return '';
+      // Looks like a URL (has a dot and no spaces) → prefix https://
+      if (/^https?:\/\//i.test(q)) return q;
+      if (/^[\w-]+(\.[\w-]+)+/.test(q) && !q.includes(' ')) return 'https://' + q;
+      // Otherwise treat as a Google search
+      return 'https://www.google.com/search?q=' + encodeURIComponent(q);
+    }
+
+    function launch(q) {
+      const target = normalizeQuery(q);
+      if (!target) return;
+      const inst = currentInstance();
+      // UV/Omega URL pattern:  <base>/uv/service/<encoded-target>
+      // Some instances use different paths; the encoder below is the UV
+      // standard and works for most public deployments.
+      const uvPath = 'uv/service/' + encodeURIComponent(target);
+      const full = new URL(uvPath, inst.base).href;
+      frame.src = full;
+    }
+
+    goBtn.addEventListener('click', () => launch(urlInput.value));
+    urlInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') launch(urlInput.value);
+    });
+    openNewBtn.addEventListener('click', () => {
+      const target = normalizeQuery(urlInput.value);
+      if (!target) return;
+      const inst = currentInstance();
+      const full = new URL('uv/service/' + encodeURIComponent(target), inst.base).href;
+      window.open(full, '_blank', 'noopener,noreferrer');
+    });
+
+    // Load the bare instance index page on first visit so the iframe isn't blank
+    frame.src = currentInstance().base;
+
+    // Useful keyboard shortcut:  / focuses the URL box
+    document.addEventListener('keydown', (e) => {
+      if (e.key === '/' && document.activeElement !== urlInput) {
+        e.preventDefault();
+        urlInput.focus();
+      }
+    });
+  })();
+  </script>
+</body>
+</html>
