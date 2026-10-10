@@ -18,7 +18,7 @@
   //   'https://calc99-ai.netlify.app/.netlify/functions/chat'
   //   'https://calc99-ai.onrender.com/chat'
   // Leave empty ('') to use demo mode (canned responses, no AI).
-  const CHAT_ENDPOINT = '';
+  const CHAT_ENDPOINT = 'https://calc99githubio.vercel.app/chat';
 
   // System prompt — tweak to your taste
   const SYSTEM_PROMPT = "You are Calc99 Assistant, a friendly and concise AI chatbot embedded in a stealthy school-bypass site. Keep answers short, useful, and slightly cheeky. If asked about homework, help with the concept but don't just hand over the answer.";
